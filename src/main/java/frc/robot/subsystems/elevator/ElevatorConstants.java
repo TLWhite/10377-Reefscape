@@ -33,8 +33,8 @@ public final class ElevatorConstants {
 
     public static final int max_output = 0;
 
-    public static final int elevatorLCanId = 11;
-    public static final int elevatorRCanId = 12;
+    public static final int leftMotor_ID = 11;
+    public static final int rightMotor_ID = 12;
 
     public static final int maxVelocity = 0;
     public static final int maxAcceleration = 0;
