@@ -13,16 +13,16 @@ package frc.robot.subsystems.elevator;
  * reduce verbosity.
  */
 public final class ElevatorConstants {
-    public static final int L1 = 5;
-    public static final int L2 = 10;
-    public static final int L3 = 15;
-    public static final int L4 = 20;
+    public static final int L1 = 5; // TODO set this value
+    public static final int L2 = 10; //  TODO set this value
+    public static final int L3 = 15; // TODO set this value
+    public static final int L4 = 20; // TODO set this value
 
     public static final int downPos = 0;
     public static final int bottomPos = 0;
 
-    public static final double minPos = 0;
-    public static final double maxPos = 10;
+    public static final double minPos = 0; // TODO set this value
+    public static final double maxPos = 10; // TODO set this value
 
     public static final int countsPerInch = 0;
     public static final int posTolerance = 0;
@@ -30,9 +30,6 @@ public final class ElevatorConstants {
     public static final double kP = 0.0;
     public static final double kD = 0.0;
     public static final double kI = 0.0;
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
-    public static final double kV = 0.0;
 
     public static final int max_output = 0;
 
@@ -42,5 +39,6 @@ public final class ElevatorConstants {
     public static final int maxVelocity = 0;
     public static final int maxAcceleration = 0;
 
-    public static final int limitSwitchPort = 0;
+    public static final int lowerLimitSwitchPort = 0; // TODO set this value
+    public static int ELEVATOR_CURRENT_LIMITS = 0; // TODO set this value
 }

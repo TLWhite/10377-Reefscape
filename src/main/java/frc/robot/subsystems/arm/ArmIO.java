@@ -1,5 +1,3 @@
 package frc.robot.subsystems.arm;
 
-public class ArmIO {
-    
-}
+public class ArmIO {}

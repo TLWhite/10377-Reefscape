@@ -1,5 +1,3 @@
 package frc.robot.subsystems.corral;
 
-public class Corral {
-    
-}
+public class Corral {}
