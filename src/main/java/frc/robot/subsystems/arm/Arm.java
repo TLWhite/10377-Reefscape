@@ -61,7 +61,8 @@ public class Arm extends SubsystemBase {
     // motor output
 
     private ShuffleboardTab DS_armTab = Shuffleboard.getTab("arm");
-    // Create a new tab on the Shuffleboard for arm data visualization
+
+    // Shuffleboard entries for arm position and setpoint
     private GenericEntry DS_armPosition = DS_armTab.add("armValue", armSpeed).getEntry();
 
     private GenericEntry DS_armSetpoint = DS_armTab.add("armSetpoint", armController.getSetpoint()).getEntry();
