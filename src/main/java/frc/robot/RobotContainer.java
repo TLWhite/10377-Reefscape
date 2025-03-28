@@ -45,7 +45,9 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final Vision vision;
+    private final Elevatorsp elevator;
     private SwerveDriveSimulation driveSimulation = null;
+    //TODO Set up arm and Elevator subsystems here
 
     // Controller
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -55,7 +57,10 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        // TODO for wirst 
+        elevator = new Elevatorsp();
         switch (Constants.currentMode) {
+
             case REAL:
                 // Real robot, instantiate hardware IO implementations
                 drive = new Drive(
@@ -108,6 +113,8 @@ public class RobotContainer {
 
                 break;
         }
+
+        
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -177,7 +184,16 @@ public class RobotContainer {
                             Meters.of(1.35),
                             MetersPerSecond.of(1.5),
                             Degrees.of(-60)))));
-        }
+        
+        // Stealth panther EXample Sequence 
+        (BBLockout.negate()).and(algeaModeEnabled.negate().and(buttonbord.button(1)))
+        .onTrue(Commands.sequence(arm.ArmSafety(
+                        () -> canFold.getAsBoolean()), elevator.ElevatorL4(wristLimiter),
+                        wrist.WristL4(() -> canFold.getAsBoolean())));
+        
+        
+        
+                        }
     }
 
     /**
