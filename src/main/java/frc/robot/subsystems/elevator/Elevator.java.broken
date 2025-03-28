@@ -1,0 +1,248 @@
+package frc.robot.subsystems.elevator;
+
+import com.revrobotics.spark.SparkMax; // Main class for Spark MAX in 2025.0.3
+import com.revrobotics.spark.SparkLowLevel.MotorType; // Motor type enum
+import com.revrobotics.spark.RelativeEncoder; // Encoder class
+import com.revrobotics.spark.IdleMode; // Idle mode enum
+import edu.wpi.first.math.controller.PIDController; // WPILib PID controller
+import edu.wpi.first.networktables.GenericEntry; // For Shuffleboard
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command; // Command-based programming
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.arm.ArmConstants;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
+public class Elevator extends SubsystemBase {
+    // Motor controllers - SparkMax controls NEO brushless motors
+    private final SparkMax leftMotor = new SparkMax(
+            ElevatorConstants.leftMotor_ID, // CAN ID from constants
+            MotorType.kBrushless); // NEO motors are brushless
+
+    private final SparkMax rightMotor = new SparkMax(
+            ElevatorConstants.rightMotor_ID,
+            MotorType.kBrushless);
+
+    private final SparkMax armMotor = new SparkMax(
+            ArmConstants.armMotor_ID,
+            MotorType.kBrushless);
+
+    // Encoders - Spark MAX has built-in encoder support for NEO motors
+    private final RelativeEncoder leftEncoder = leftMotor.getEncoder(); // Primary position tracking
+    private final RelativeEncoder rightEncoder = rightMotor.getEncoder(); // Could be used for verification
+
+    // PID Controller for maintaining elevator position
+    private final PIDController elevatorController = new PIDController(
+            0.08, // P gain - proportional response (TODO: tune)
+            0, // I gain - integral response
+            0); // D gain - derivative response
+
+    // Shuffleboard setup for driver station monitoring
+    private ShuffleboardTab DS_ElevatorTab = Shuffleboard.getTab("Elevator");
+    private GenericEntry DS_ElevatorPosition = DS_ElevatorTab.add("ElevatorValue", 0).getEntry();
+    private GenericEntry DS_canLift = DS_ElevatorTab.add("CanLift", true).getEntry();
+    private GenericEntry DS_ElevatorSetpoint = DS_ElevatorTab.add("Setpoint", elevatorController.getSetpoint())
+            .getEntry();
+
+    // Position constants (encoder units - need to be calibrated)
+    public static final int L1 = 5;
+    public static final int L2 = 10;
+    public static final int L3 = 15;
+    public static final int L4 = 20;
+    public static final int downPos = 0;
+    public static final int bottomPos = 0;
+
+    // Constructor - initializes the elevator subsystem
+    public Elevator() {
+        configureSparkMax(); // Set up motor controllers
+        elevatorController.setSetpoint(getPosition()); // Start at current position
+        elevatorController.setTolerance(1); // ±1 unit tolerance for "at setpoint"
+    }
+
+    // Configure Spark MAX controllers with NEO-specific settings
+    private void configureSparkMax() {
+        // Reset to factory defaults to ensure clean configuration
+        leftMotor.restoreFactoryDefaults();
+        rightMotor.restoreFactoryDefaults();
+
+        // Set brake mode - holds position when stopped (important for elevators)
+        leftMotor.setIdleMode(IdleMode.kBrake);
+        rightMotor.setIdleMode(IdleMode.kBrake);
+
+        // Current limiting protects NEO motors from burnout
+        leftMotor.setSmartCurrentLimit(ElevatorConstants.ELEVATOR_CURRENT_LIMITS);
+        rightMotor.setSmartCurrentLimit(ElevatorConstants.ELEVATOR_CURRENT_LIMITS);
+
+        // Invert motors if needed (depends on physical wiring/gearbox)
+        leftMotor.setInverted(true);
+        rightMotor.setInverted(true);
+
+        // Soft limits prevent over-extension (disabled by default)
+        leftMotor.enableSoftLimit(SparkMax.SoftLimitDirection.kForward, false);
+        leftMotor.enableSoftLimit(SparkMax.SoftLimitDirection.kReverse, false);
+        rightMotor.enableSoftLimit(SparkMax.SoftLimitDirection.kForward, false);
+        rightMotor.enableSoftLimit(SparkMax.SoftLimitDirection.kReverse, false);
+
+        // Set soft limit positions
+        leftMotor.setSoftLimit(SparkMax.SoftLimitDirection.kForward, ElevatorConstants.maxPos);
+        leftMotor.setSoftLimit(SparkMax.SoftLimitDirection.kReverse, ElevatorConstants.minPos);
+        rightMotor.setSoftLimit(SparkMax.SoftLimitDirection.kForward, ElevatorConstants.maxPos);
+        rightMotor.setSoftLimit(SparkMax.SoftLimitDirection.kReverse, ElevatorConstants.minPos);
+
+        // Save settings to controller flash memory
+        leftMotor.burnFlash();
+        rightMotor.burnFlash();
+    }
+
+    // Get current elevator position from left encoder
+    public double getPosition() {
+        return leftEncoder.getPosition(); // NEO encoder units (rotations)
+    }
+
+    // Check if elevator is at target position
+    public boolean elevatorAtSetpoint() {
+        return elevatorController.atSetpoint();
+    }
+
+    // Set motor output (-1.0 to 1.0)
+    private void setMotorPower(SparkMax motor, double power) {
+        motor.set(power); // Spark MAX takes -1.0 to 1.0 input
+    }
+
+    // Main motor control method with limits and feedforward
+    public void setElevatorMotor(double power) {
+        double output = elevatorLimit(power); // Apply position limits
+        double kFValue = kfValueSetter(); // Calculate feedforward
+        SmartDashboard.putNumber("LimitOutput", output);
+        SmartDashboard.putNumber("Kf value", kFValue);
+        setMotorPower(leftMotor, output + kFValue); // Apply power + feedforward
+        setMotorPower(rightMotor, output + kFValue);
+    }
+
+    // Check if at maximum height
+    public boolean atTopLimit() {
+        return getPosition() >= 218; // Hard-coded top limit
+    }
+
+    // Limit motor power based on position constraints
+    private double elevatorLimit(double power) {
+        SmartDashboard.putNumber("Input", power);
+        if ((getPosition() >= ElevatorConstants.maxPos && power > 0) || // At top, trying to go up
+                (getPosition() <= ElevatorConstants.minPos && power < 0)) { // At bottom, trying to go down
+            return 0.0; // Stop movement
+        }
+        SmartDashboard.putNumber("output", power);
+        return power; // Allow movement within bounds
+    }
+
+    // Set PID target position
+    public void setPID(double setPoint) {
+        elevatorController.setSetpoint(setPoint);
+    }
+
+    // Calculate feedforward value based on position
+    public double kfValueSetter() {
+        return (getPosition() < 0.5) ? 0.01 : 0.025; // Different kF for low/high positions
+    }
+
+    // Calculate throttle reduction based on height
+    public double Throttle() {
+        return (1 - 0.5 * (getPosition() / 65.71)); // Reduces drive speed as elevator rises
+    }
+
+    // Arm folding permission (currently always true)
+    public Trigger canFold() {
+        return new Trigger(() -> true);
+    }
+
+    // Reset encoder positions to zero
+    public void zeroElevator() {
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
+    }
+
+    // Execute PID control loop
+    public void executeElevatorPID() {
+        double PIDValue = elevatorController.calculate(getPosition());
+        setElevatorMotor(PIDValue);
+    }
+
+    // Manual control command using joystick input
+    public Command ManualElevator(DoubleSupplier elevatorJoystick) {
+        return new FunctionalCommand(
+                () -> {
+                }, // Init
+                () -> setElevatorMotor(elevatorJoystick.getAsDouble() * 0.8), // Scale joystick input
+                interrupted -> setPID(getPosition()), // Hold position on interrupt
+                () -> false, // Never finish
+                this);
+    }
+
+    // Startup command to hold current position
+    public Command startCommand() {
+        return runOnce(() -> setPID(getPosition()));
+    }
+
+    // Default PID control command
+    public Command elevatorPIDCommandDefault(BooleanSupplier armLimiter) {
+        return new FunctionalCommand(
+                () -> {
+                },
+                () -> executeElevatorPID(),
+                interrupted -> {
+                },
+                () -> false,
+                this);
+    }
+
+    // Move to specific position command
+    public Command MovetoPosition(double position) {
+        return new FunctionalCommand(
+                () -> setPID(position), // Set target
+                () -> executeElevatorPID(), // Run PID
+                interrupted -> { // On interrupt
+                    setPID(getPosition());
+                    setElevatorMotor(0);
+                },
+                () -> elevatorAtSetpoint(), // Finish when at target
+                this);
+    }
+
+    // Preset position commands
+    public Command ElevatorLoad() {
+        return MovetoPosition(0);
+    }
+
+    public Command ElevatorL1() {
+        return MovetoPosition(10.88);
+    }
+
+    public Command ElevatorL2() {
+        return MovetoPosition(66.43);
+    }
+
+    public Command ElevatorL3() {
+        return MovetoPosition(133.998);
+    }
+
+    public Command ElevatorL4() {
+        return MovetoPosition(218);
+    }
+
+    public Command ExitState() {
+        return MovetoPosition(getPosition());
+    }
+
+    // Periodic updates for monitoring
+    @Override
+    public void periodic() {
+        DS_ElevatorPosition.setDouble(getPosition());
+        DS_ElevatorSetpoint.setDouble(elevatorController.getSetpoint());
+        SmartDashboard.putNumber("leftMotor speed", leftMotor.get());
+        SmartDashboard.putNumber("rightMotor speed", rightMotor.get());
+    }
+}

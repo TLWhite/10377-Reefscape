@@ -24,7 +24,8 @@ public final class ElevatorConstants {
     public static final double minPos = 0; // TODO set this value
     public static final double maxPos = 10; // TODO set this value
 
-    public static final int countsPerInch = 0;
+    public static final int countsPerInch = 0; // TODO: find this value
+
     public static final int posTolerance = 0;
 
     public static final double kP = 0.0;
