@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.elevator.Elevatorsp;
 import frc.robot.subsystems.vision.*;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -184,16 +185,17 @@ public class RobotContainer {
                             Meters.of(1.35),
                             MetersPerSecond.of(1.5),
                             Degrees.of(-60)))));
+        }
         
         // Stealth panther EXample Sequence 
-        (BBLockout.negate()).and(algeaModeEnabled.negate().and(buttonbord.button(1)))
+       /*  (BBLockout.negate()).and(algeaModeEnabled.negate().and(buttonbord.button(1)))
         .onTrue(Commands.sequence(arm.ArmSafety(
                         () -> canFold.getAsBoolean()), elevator.ElevatorL4(wristLimiter),
                         wrist.WristL4(() -> canFold.getAsBoolean())));
         
         
         
-                        }
+                        } */
     }
 
     /**

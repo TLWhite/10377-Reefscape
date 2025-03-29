@@ -2,11 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.arm;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -17,6 +18,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +27,9 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.armConstants;
+import frc.robot.subsystems.arm.ArmConstants;
 
-public class armsp extends SubsystemBase {
+public class ArmSP extends SubsystemBase {
   /**
    * Creates a new arm subsystem. This class controls the arm motor and
    * allows for various actions like manual control, setting arm positions,
@@ -45,7 +47,7 @@ public class armsp extends SubsystemBase {
   // Motor controller for the arm system
   private final TalonFX armMotor = new TalonFX(ArmConstants.armMotor_ID);
 
- private final DutyCycle armEncoder= new DutyCycle(ArmConstants.encoderPort,1,0);
+ private final DutyCycleEncoder armEncoder= new DutyCycleEncoder(ArmConstants.encoderPort,1,0);
  
 
   // Configuration objects for motor controllers
@@ -74,7 +76,7 @@ public class armsp extends SubsystemBase {
 
   // Retrieve the arm speed from the Shuffleboard, defaulting to 0.4 if not set
 
-  public armsp() {
+  public ArmSP() {
    
     armController.setTolerance(.0075);
 
@@ -121,11 +123,11 @@ public class armsp extends SubsystemBase {
   private double Limit(double speed) {
     double output= speed;
 
-    if((armAbsEncoder.getPosition()< 0.7&&armAbsEncoder.getPosition()> .315) && speed>0)// TODO find arm limits 
+    if((getarmPosition()< 0.7&&getarmPosition()> .315) && speed>0)// TODO find arm limits 
     {
       output = 0;
     }
-    else if((armAbsEncoder.getPosition()>= 0.7||armAbsEncoder.getPosition() < .109) && speed<0)
+    else if((getarmPosition()>= 0.7||getarmPosition() < .109) && speed<0)
     {
       output = 0;
     }
@@ -154,14 +156,14 @@ public class armsp extends SubsystemBase {
   }
 
   // Method to set the desired target arm position for PID control
-  public void setarmPID(double setPoint) {
+  public void setPID(double setPoint) {
     this.armController.setSetpoint(setPoint);
     // Set the desired position (setpoint) for the arm using the PID controller
   }
 
   // Method to execute PID control to adjust the motor power and move the arm
   // towards the target position
-  public void executearmPID() {
+  public void executePID() {
     setMotor((this.armController.calculate(this.getarmPosition())));
     // Calculate the appropriate motor power based on the PID controller and apply
     // it to the arm motor
@@ -184,7 +186,7 @@ public class armsp extends SubsystemBase {
           this.safeFold = canFold.getAsBoolean();
         }, // Initialize: No action needed
         () -> {
-          this.executearmPID();
+          this.executePID();
           this.safeFold = canFold.getAsBoolean();
         }, // Execute: Run the PID control to adjust arm position
         interrupted -> {
@@ -206,14 +208,14 @@ public class armsp extends SubsystemBase {
         }, // Initialize: No action needed
         () -> {
           // this.armSpeed = this.DS_armSpeed.getDouble(armSpeed);
-          this.setarmMotor(armJoystick.getAsDouble() * 0.3);
+          this.setMotor(armJoystick.getAsDouble() * 0.3);
         }, // Execute: Set arm motor power based
         // this.armSpeed
         // on joystick
         // input (scaled by 0.2 for control)
         interrupted -> {
-          this.setarmMotor(0);
-          this.setarmPID(getarmPosition());}, // Interrupted: Reset to the current arm position if
+          this.setMotor(0);
+          this.setPID(getarmPosition());}, // Interrupted: Reset to the current arm position if
                                                              // interrupted
         () -> {
           return false; // Finish condition: Always false, meaning the command never finishes
@@ -229,17 +231,17 @@ public class armsp extends SubsystemBase {
   public Command armCommandFactory(BooleanSupplier canFold, double position) {
     return new FunctionalCommand(
         () -> {
-          this.setarmPID(position);
+          this.setPID(position);
           this.safeFold = canFold.getAsBoolean(); // Set arm to position L1 (0.445)
         },
         () -> {
           this.safeFold = canFold.getAsBoolean();
-          this.executearmPID();
+          this.executePID();
 
         },
         interrupted -> {
-          this.setarmPID(this.getarmPosition());
-          this.setarmMotor(0);
+          this.setPID(this.getarmPosition());
+          this.setMotor(0);
 
         }, // Interrupted: No specific action when interrupted
         () ->this.armAtSetpoint(), // Finish condition: Check if arm has reached L1 position
@@ -250,7 +252,7 @@ public class armsp extends SubsystemBase {
   // transitions)
   public Command startarmCommand() { // This command makes the arm hold its starting position
     return this.runOnce(() -> {
-      this.setarmPID(this.getarmPosition());
+      this.setPID(this.getarmPosition());
     });
   }
 
