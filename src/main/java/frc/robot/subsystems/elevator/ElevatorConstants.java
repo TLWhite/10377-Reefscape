@@ -13,34 +13,27 @@ package frc.robot.subsystems.elevator;
  * reduce verbosity.
  */
 public final class ElevatorConstants {
-    public static final int L1 = 5;
-    public static final int L2 = 10;
-    public static final int L3 = 15;
-    public static final int L4 = 20;
+    public static final int DOWN_POS = 0;
+    public static final int BOTTOM_POS = 0;
 
-    public static final int downPos = 0;
-    public static final int bottomPos = 0;
+    public static final double MIN_POS = 0; // TODO set this value
+    public static final double MAX_POS = 10; // TODO set this value
 
-    public static final double minPos = 0;
-    public static final double maxPos = 10;
+    public static final int COUNTS_PER_INCH = 0;
+    public static final int POS_TOLERANCE = 0;
 
-    public static final int countsPerInch = 0;
-    public static final int posTolerance = 0;
+    public static final double KP = 0.0;
+    public static final double KD = 0.0;
+    public static final double KI = 0.0;
 
-    public static final double kP = 0.0;
-    public static final double kD = 0.0;
-    public static final double kI = 0.0;
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
-    public static final double kV = 0.0;
+    public static final int MAX_OUTPUT = 0;
 
-    public static final int max_output = 0;
+    public static final int ELEVATOR_L_CAN_ID = 11;
+    public static final int ELEVATOR_R_CAN_ID = 12;
 
-    public static final int elevatorLCanId = 11;
-    public static final int elevatorRCanId = 12;
+    public static final int MAX_VELOCITY = 0;
+    public static final int MAX_ACCELERATION = 0;
 
-    public static final int maxVelocity = 0;
-    public static final int maxAcceleration = 0;
-
-    public static final int limitSwitchPort = 0;
+    public static final int LOWER_LIMIT_SWITCH_PORT = 0; // TODO set this value
+    public static int ELEVATOR_CURRENT_LIMITS = 0; // TODO set this value
 }
