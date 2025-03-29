@@ -1,39 +1,22 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.elevator;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
- * class should not be used for any other purpose. All constants should be declared globally (i.e. public static). Do
- * not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the constants are needed, to
- * reduce verbosity.
- */
-public final class ElevatorConstants {
-    public static final int DOWN_POS = 0;
-    public static final int BOTTOM_POS = 0;
-
-    public static final double MIN_POS = 0; // TODO set this value
-    public static final double MAX_POS = 10; // TODO set this value
-
-    public static final int COUNTS_PER_INCH = 0;
-    public static final int POS_TOLERANCE = 0;
-
-    public static final double KP = 0.0;
-    public static final double KD = 0.0;
-    public static final double KI = 0.0;
-
-    public static final int MAX_OUTPUT = 0;
-
-    public static final int ELEVATOR_L_CAN_ID = 11;
-    public static final int ELEVATOR_R_CAN_ID = 12;
-
-    public static final int MAX_VELOCITY = 0;
-    public static final int MAX_ACCELERATION = 0;
-
-    public static final int LOWER_LIMIT_SWITCH_PORT = 0; // TODO set this value
-    public static int ELEVATOR_CURRENT_LIMITS = 0; // TODO set this value
+public class ElevatorConstants {
+    public static final int ELEVATOR_L_CAN_ID = 1; // TODO: Replace with your actual CAN ID
+    public static final int ELEVATOR_R_CAN_ID = 2; // TODO: Replace with your actual CAN ID
+    public static final int LOWER_LIMIT_SWITCH_PORT = 0; // TODO: Replace with your actual DIO port
+    public static final int ELEVATOR_CURRENT_LIMITS = 40; // TODO: Verify or adjust this value
+    public static final double MAX_POS = 218; // Max position in encoder units
+    public static final double MIN_POS = 0; // Min position in encoder units
+    public static final double LOAD_POS = 0; // TODO: Set this value
+    public static final double L1_POS = 10.88; // TODO: Verify this value
+    public static final double L2_POS = 66.43; // TODO: Verify this value
+    public static final double L3_POS = 133.998; // TODO: Verify this value
+    public static final double L4_POS = 218; // TODO: Verify this value
+    public static final double P = 0.08; // PID Proportional gain
+    public static final double I = 0; // PID Integral gain
+    public static final double D = 0; // PID Derivative gain
+    public static final double PID_TOLERANCE = 1; // PID tolerance in encoder units
+    public static final double KF_BELOW_0_5 = 0.01; // Feedforward below 0.5 units
+    public static final double KF_ABOVE_0_5 = 0.025; // Feedforward above 0.5 units
+    public static final double THROTTLE_DIVISOR = 65.71; // For drive throttle calculation
 }

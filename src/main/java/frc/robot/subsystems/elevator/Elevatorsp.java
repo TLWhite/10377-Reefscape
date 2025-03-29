@@ -57,7 +57,7 @@ public class Elevatorsp extends SubsystemBase {
             DS_ElevatorTab.add("ElevatorValue", 0).getEntry(); // Entry for elevator
     // position
 
-    private GenericEntry DS_canLift = DS_ElevatorTab.add("CanLift", true).getEntry(); // Entry for canLift
+    // Removed unused field DS_canLift
 
     private final GenericEntry DS_ElevatorSetpoint =
             DS_ElevatorTab.add("Setpoint", elevatorController.getSetpoint()).getEntry();
