@@ -13,8 +13,12 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static frc.robot.subsystems.vision.VisionConstants.camera0Name;
+import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
+import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,9 +32,20 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
+import frc.robot.subsystems.drive.GyroIOSim;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.elevator.Elevatorsp;
-import frc.robot.subsystems.vision.*;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionConstants;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly;
@@ -48,7 +63,7 @@ public class RobotContainer {
     private final Vision vision;
     private final Elevatorsp elevator;
     private SwerveDriveSimulation driveSimulation = null;
-    //TODO Set up arm and Elevator subsystems here
+    // TODO Set up arm and Elevator subsystems here
 
     // Controller
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -58,11 +73,10 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // TODO for wirst 
+        // TODO for wirst
         elevator = new Elevatorsp();
         switch (Constants.currentMode) {
-
-            case REAL:
+            case REAL -> {
                 // Real robot, instantiate hardware IO implementations
                 drive = new Drive(
                         new GyroIOPigeon2(),
@@ -76,9 +90,8 @@ public class RobotContainer {
                         drive,
                         new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                         new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-
-                break;
-            case SIM:
+            }
+            case SIM -> {
                 // create a maple-sim swerve drive simulation instance
                 this.driveSimulation =
                         new SwerveDriveSimulation(DriveConstants.mapleSimConfig, new Pose2d(3, 3, new Rotation2d()));
@@ -99,9 +112,8 @@ public class RobotContainer {
                                 camera0Name, robotToCamera0, driveSimulation::getSimulatedDriveTrainPose),
                         new VisionIOPhotonVisionSim(
                                 camera1Name, robotToCamera1, driveSimulation::getSimulatedDriveTrainPose));
-
-                break;
-            default:
+            }
+            default -> {
                 // Replayed robot, disable IO implementations
                 drive = new Drive(
                         new GyroIO() {},
@@ -111,11 +123,8 @@ public class RobotContainer {
                         new ModuleIO() {},
                         (pose) -> {});
                 vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
-
-                break;
+            }
         }
-
-        
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -186,15 +195,15 @@ public class RobotContainer {
                             MetersPerSecond.of(1.5),
                             Degrees.of(-60)))));
         }
-        
-        // Stealth panther EXample Sequence 
-       /*  (BBLockout.negate()).and(algeaModeEnabled.negate().and(buttonbord.button(1)))
+
+        // Stealth panther EXample Sequence
+        /*  (BBLockout.negate()).and(algeaModeEnabled.negate().and(buttonbord.button(1)))
         .onTrue(Commands.sequence(arm.ArmSafety(
                         () -> canFold.getAsBoolean()), elevator.ElevatorL4(wristLimiter),
                         wrist.WristL4(() -> canFold.getAsBoolean())));
-        
-        
-        
+
+
+
                         } */
     }
 

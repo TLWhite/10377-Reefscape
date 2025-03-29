@@ -30,11 +30,12 @@ public class Elevatorsp extends SubsystemBase {
 
     // Define the TalonFX motor controllers for both sides of the elevator (left and
     // right).
-    private final SparkMax leftMotor = new SparkMax(ElevatorConstants.elevatorLCanId, SparkMax.MotorType.kBrushless);
+    private final SparkMax leftMotor = new SparkMax(ElevatorConstants.ELEVATOR_L_CAN_ID, SparkMax.MotorType.kBrushless);
 
-    private final SparkMax rightMotor = new SparkMax(ElevatorConstants.elevatorRCanId, SparkMax.MotorType.kBrushless);
+    private final SparkMax rightMotor =
+            new SparkMax(ElevatorConstants.ELEVATOR_R_CAN_ID, SparkMax.MotorType.kBrushless);
     public RelativeEncoder encoder = rightMotor.getEncoder();
-    private final DigitalInput limitSwitch = new DigitalInput(ElevatorConstants.lowerLimitSwitchPort);
+    private final DigitalInput limitSwitch = new DigitalInput(ElevatorConstants.LOWER_LIMIT_SWITCH_PORT);
     public CANrange canRange = new CANrange(27);
 
     private final SparkMaxConfig leftElevatorConfig =
@@ -51,14 +52,14 @@ public class Elevatorsp extends SubsystemBase {
     // Setup Shuffleboard (WPILib's dashboard) for real-time monitoring of the
     // elevator state during the match.
 
-    private ShuffleboardTab DS_ElevatorTab = Shuffleboard.getTab("Elevator");
-    private GenericEntry DS_ElevatorPosition =
+    private final ShuffleboardTab DS_ElevatorTab = Shuffleboard.getTab("Elevator");
+    private final GenericEntry DS_ElevatorPosition =
             DS_ElevatorTab.add("ElevatorValue", 0).getEntry(); // Entry for elevator
     // position
 
     private GenericEntry DS_canLift = DS_ElevatorTab.add("CanLift", true).getEntry(); // Entry for canLift
 
-    private GenericEntry DS_ElevatorSetpoint =
+    private final GenericEntry DS_ElevatorSetpoint =
             DS_ElevatorTab.add("Setpoint", elevatorController.getSetpoint()).getEntry();
 
     // Default max elevator speed as defined by Shuffleboard.
@@ -70,7 +71,7 @@ public class Elevatorsp extends SubsystemBase {
         configureSparkmax();
 
         // Set initial PID controller setpoint to current elevator position.
-        elevatorController.setSetpoint(getPosition());
+        elevatorController.setSetpoint(getInitialPosition());
         elevatorController.setTolerance(1); // Set tolerance to 1 (tolerance defines when the PID controller considers
         // the
         // target reached)
@@ -89,9 +90,9 @@ public class Elevatorsp extends SubsystemBase {
                 .inverted(true); // Protects motor hardware by limiting current. TODO check if this is correct
         leftElevatorConfig
                 .softLimit
-                .forwardSoftLimit(ElevatorConstants.maxPos) // TODO set this value
+                .forwardSoftLimit(ElevatorConstants.MAX_POS) // TODO set this value
                 .forwardSoftLimitEnabled(false)
-                .reverseSoftLimit(ElevatorConstants.minPos) // TODO set this value
+                .reverseSoftLimit(ElevatorConstants.MIN_POS) // TODO set this value
                 .reverseSoftLimitEnabled(false);
 
         rightElevatorConfig
@@ -100,9 +101,9 @@ public class Elevatorsp extends SubsystemBase {
                 .inverted(true); // Protects motor hardware by limiting current.TODO check if this is correct
         rightElevatorConfig
                 .softLimit
-                .forwardSoftLimit(ElevatorConstants.maxPos) // TODO set this value
+                .forwardSoftLimit(ElevatorConstants.MAX_POS) // TODO set this value
                 .forwardSoftLimitEnabled(false)
-                .reverseSoftLimit(ElevatorConstants.minPos) // TODO set this value
+                .reverseSoftLimit(ElevatorConstants.MIN_POS) // TODO set this value
                 .reverseSoftLimitEnabled(false);
 
         // Apply the configurations to the motor controllers.
@@ -117,7 +118,11 @@ public class Elevatorsp extends SubsystemBase {
     // Method to get the current position of the elevator by reading the position
     // from the right motor.
     public double getPosition() {
-        return (encoder.getPosition()); // Return the current position of the elevator.
+        return encoder.getPosition(); // Return the current position of the elevator.
+    }
+
+    private double getInitialPosition() {
+        return encoder.getPosition(); // Helper method to safely get the initial position.
     }
 
     /*
@@ -152,14 +157,14 @@ public class Elevatorsp extends SubsystemBase {
     // Limit the motor power based on certain conditions such as the current
     // position of the elevator and whether it can lift.
     private double elevatorLimit(double power) {
-        double output = 0; // Default output is 0 (no power).
+        double output; // Declare the variable without an initial value.
         SmartDashboard.putNumber("Input", power);
         // If the elevator can't lift or if the elevator is at the top or bottom, set
         // the output power to a small value.
-        if ((getPosition() >= ElevatorConstants.maxPos && power > 0) // Positive Power makes the
+        if ((getPosition() >= ElevatorConstants.MAX_POS && power > 0) // Positive Power makes the
 
                 // robot go up negative makes the robot go down
-                || (getPosition() <= ElevatorConstants.minPos && power < 0)) {
+                || (getPosition() <= ElevatorConstants.MIN_POS && power < 0)) {
 
             output = 0.0;
             // Output is zero but is given a kf value of .02 when it is applied to the motor
@@ -179,14 +184,11 @@ public class Elevatorsp extends SubsystemBase {
     }
 
     public double kfValueSetter() {
-        double kF = 0;
         if (this.getPosition() < 0.5) {
-            kF = 0.01; // VALUE FOR BELLOW A POSTION TO ALLOW ELEVAT0R TO ZERO TODO SET VALUE
+            return 0.01; // VALUE FOR BELLOW A POSTION TO ALLOW ELEVAT0R TO ZERO TODO SET VALUE
         } else {
-            kF = 0.025; // TODO SET VALUE
+            return 0.025; // TODO SET VALUE
         }
-
-        return kF;
     }
 
     public double Throttle() {
