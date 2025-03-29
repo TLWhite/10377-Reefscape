@@ -77,6 +77,22 @@ public class Elevator extends SubsystemBase {
         io.setVoltage(limitedVolts + kfVolts);
         SmartDashboard.putNumber("LimitOutput", limitedVolts);
         SmartDashboard.putNumber("Kf value", kfVolts / 12.0);
+        SmartDashboard.putNumber("Elevator Output", (limitedVolts + kfVolts) / 12.0);
+        SmartDashboard.putData("Elevator", this); // Update the dashboard with the elevator data
+        SmartDashboard.putNumber("Elevator Voltage", limitedVolts + kfVolts);
+        SmartDashboard.putNumber("Elevator Voltage Limited", limitedVolts);
+        SmartDashboard.putNumber("Elevator Position", inputs.position);
+        SmartDashboard.putNumber("Elevator Setpoint", elevatorController.getSetpoint());
+        SmartDashboard.putBoolean("Elevator Limit Switch", inputs.limitSwitch);
+        SmartDashboard.putBoolean("Arm in Safe Fold Range", arm == null || arm.isInSafeFoldRange());
+        SmartDashboard.putBoolean("Arm is set", arm != null);
+        SmartDashboard.putString(
+                "Elevator Status", arm == null ? "No Arm Set" : arm.isInSafeFoldRange() ? "Safe" : "Unsafe");
+        SmartDashboard.putString("Elevator State", inputs.limitSwitch ? "At Lower Limit" : "Normal Operation");
+        SmartDashboard.putString("Elevator Power State", limitedVolts == 0 ? "Off" : "On");
+        SmartDashboard.putString("Elevator Power", limitedVolts > 0 ? "Up" : (limitedVolts < 0 ? "Down" : "Stopped"));
+        SmartDashboard.putString(
+                "Elevator Direction", limitedVolts > 0 ? "Up" : (limitedVolts < 0 ? "Down" : "Stopped"));
     }
 
     public void setPID(double setpoint) {

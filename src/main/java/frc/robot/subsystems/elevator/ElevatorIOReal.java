@@ -17,7 +17,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public ElevatorIOReal() {
         SparkMaxConfig config = new SparkMaxConfig();
-        config.idleMode(IdleMode.kCoast)
+        config.idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(ElevatorConstants.ELEVATOR_CURRENT_LIMITS)
                 .inverted(true);
         config.softLimit
@@ -27,6 +27,8 @@ public class ElevatorIOReal implements ElevatorIO {
                 .reverseSoftLimitEnabled(false);
 
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        config.inverted(false);
         rightMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 

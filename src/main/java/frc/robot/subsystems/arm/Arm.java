@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         if (!initialized) {
-            armController.setSetpoint(getPosition());
+            armController.setSetpoint(-0.05);
             initialized = true;
         }
         io.updateInputs(inputs);
@@ -49,8 +49,8 @@ public class Arm extends SubsystemBase {
     }
 
     private double limit(double power) {
-        if ((inputs.position < ArmConstants.MAX_POS && inputs.position > 0.315 && power > 0)
-                || (inputs.position >= ArmConstants.MAX_POS || inputs.position < ArmConstants.MIN_POS) && power < 0) {
+        if ((inputs.position > ArmConstants.MAX_POS && power > 0)
+                || (inputs.position < ArmConstants.MIN_POS) && power > 0) {
             return 0;
         }
         return power;
@@ -60,8 +60,6 @@ public class Arm extends SubsystemBase {
         double limitedVolts = limit(volts);
         double kfVolts = Math.sin(inputs.position * 2 * Math.PI) * ArmConstants.KF_COEFFICIENT * 12.0;
         io.setVoltage(limitedVolts + kfVolts);
-        SmartDashboard.putNumber("arm axis", volts / 12.0);
-        SmartDashboard.putNumber("Speed", (limitedVolts + kfVolts) / 12.0);
     }
 
     public void stopMotor() {

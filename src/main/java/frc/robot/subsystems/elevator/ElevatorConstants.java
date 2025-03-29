@@ -1,8 +1,8 @@
 package frc.robot.subsystems.elevator;
 
 public class ElevatorConstants {
-    public static final int ELEVATOR_L_CAN_ID = 1; // TODO: Replace with your actual CAN ID
-    public static final int ELEVATOR_R_CAN_ID = 2; // TODO: Replace with your actual CAN ID
+    public static final int ELEVATOR_L_CAN_ID = 11; // TODO: Replace with your actual CAN ID
+    public static final int ELEVATOR_R_CAN_ID = 12; // TODO: Replace with your actual CAN ID
     public static final int LOWER_LIMIT_SWITCH_PORT = 0; // TODO: Replace with your actual DIO port
     public static final int ELEVATOR_CURRENT_LIMITS = 40; // TODO: Verify or adjust this value
     public static final double MAX_POS = 218; // Max position in encoder units

@@ -20,7 +20,13 @@ public class ArmIOReal implements ArmIO {
 
     @Override
     public double getPosition() {
-        return encoder.get();
+        double rawValue = -encoder.get();
+
+        if (rawValue < -0.5) {
+            rawValue += 1.0;
+        }
+
+        return rawValue;
     }
 
     @Override
