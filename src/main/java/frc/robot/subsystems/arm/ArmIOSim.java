@@ -15,6 +15,7 @@ public class ArmIOSim implements ArmIO {
             false, // Simulate gravity
             ArmConstants.ARM_LENGTH // Arm length (meters)
             );
+
     // private final DIOSim limitSwitchSim = new DIOSim(ArmConstants.LIMIT_SWITCH_PORT);
     private double appliedVolts = 0.0;
 
@@ -46,5 +47,11 @@ public class ArmIOSim implements ArmIO {
         inputs.velocity = getVelocity();
         inputs.appliedVolts = appliedVolts;
         inputs.limitSwitch = getLimitSwitch();
+    }
+
+    @Override
+    public void zeroEncoder() {
+        // Log simulated encoder zeroing
+        System.out.println("ArmIOSim: zeroEncoder() called.");
     }
 }

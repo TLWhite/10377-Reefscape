@@ -9,8 +9,6 @@ public interface ArmIO {
 
     boolean getLimitSwitch();
 
-    void zeroEncoder();
-
     void updateInputs(ArmIOInputs inputs);
 
     public class ArmIOInputs {

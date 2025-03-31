@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.9440824468085105,
+        "y": 5.320246010638297
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.289037883279693,
+        "y": 5.688505235808441
+      },
+      "isLocked": false,
+      "linkedName": "end of 2P"
+    },
+    {
+      "anchor": {
+        "x": 1.213563829787234,
+        "y": 6.965558510638298
+      },
+      "prevControl": {
+        "x": 1.439754793778641,
+        "y": 6.83793991237205
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End of intake part 2 left side"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L1",
+      "waypointRelativePos": 0.2,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.36588612403263
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -60.422161318738716
+  },
+  "useDefaultConstraints": false
+}
