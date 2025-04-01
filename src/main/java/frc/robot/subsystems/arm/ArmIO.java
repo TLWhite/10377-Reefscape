@@ -16,5 +16,6 @@ public interface ArmIO {
         public double velocity = 0.0;
         public double appliedVolts = 0.0;
         public boolean limitSwitch = false;
+        public double offset = 0.0; // Added offset field
     }
 }

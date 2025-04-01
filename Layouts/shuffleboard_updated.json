@@ -56,34 +56,6 @@
               1
             ],
             "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/elevator limit",
-              "_title": "elevator limit",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "4,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Basic Subsystem",
-              "_source0": "network_table:///SmartDashboard/Elevator",
-              "_title": "Elevator",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/BatterySim/TotalCurrent (Amps)",
               "_title": "BatterySim/TotalCurrent (Amps)",
@@ -91,7 +63,7 @@
               "_showGlyph": false
             }
           },
-          "7,0": {
+          "4,0": {
             "size": [
               1,
               1
@@ -104,7 +76,7 @@
               "_showGlyph": false
             }
           },
-          "8,0": {
+          "5,0": {
             "size": [
               1,
               1
