@@ -1,0 +1,176 @@
+{
+  "title": "Arm Tuning Dashboard",
+  "widgets": [
+    {
+      "type": "number",
+      "name": "armValue",
+      "tab": "Arm",
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "type": "number",
+      "name": "armSetpoint",
+      "tab": "Arm",
+      "position": [
+        1,
+        0
+      ]
+    },
+    {
+      "type": "number",
+      "name": "Arm kP",
+      "tab": "Arm",
+      "position": [
+        0,
+        1
+      ]
+    },
+    {
+      "type": "number",
+      "name": "Arm kI",
+      "tab": "Arm",
+      "position": [
+        1,
+        1
+      ]
+    },
+    {
+      "type": "number",
+      "name": "Arm kD",
+      "tab": "Arm",
+      "position": [
+        2,
+        1
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Update PID Values",
+      "tab": "Arm",
+      "position": [
+        0,
+        2
+      ]
+    },
+    {
+      "type": "number",
+      "name": "Setpoint Input",
+      "tab": "Arm",
+      "position": [
+        1,
+        2
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Move to Setpoint",
+      "tab": "Arm",
+      "position": [
+        2,
+        2
+      ]
+    },
+    {
+      "type": "number",
+      "name": "L0 Setpoint",
+      "tab": "Arm",
+      "position": [
+        0,
+        3
+      ]
+    },
+    {
+      "type": "number",
+      "name": "L1 Setpoint",
+      "tab": "Arm",
+      "position": [
+        1,
+        3
+      ]
+    },
+    {
+      "type": "number",
+      "name": "L2 Setpoint",
+      "tab": "Arm",
+      "position": [
+        2,
+        3
+      ]
+    },
+    {
+      "type": "number",
+      "name": "L3 Setpoint",
+      "tab": "Arm",
+      "position": [
+        3,
+        3
+      ]
+    },
+    {
+      "type": "number",
+      "name": "L4 Setpoint",
+      "tab": "Arm",
+      "position": [
+        4,
+        3
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "At L0",
+      "tab": "Arm",
+      "position": [
+        0,
+        4
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "At L1",
+      "tab": "Arm",
+      "position": [
+        1,
+        4
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "At L2",
+      "tab": "Arm",
+      "position": [
+        2,
+        4
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "At L3",
+      "tab": "Arm",
+      "position": [
+        3,
+        4
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "At L4",
+      "tab": "Arm",
+      "position": [
+        4,
+        4
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "Can Lift",
+      "tab": "Arm",
+      "position": [
+        0,
+        5
+      ]
+    }
+  ]
+}
