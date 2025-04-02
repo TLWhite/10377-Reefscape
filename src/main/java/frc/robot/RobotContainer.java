@@ -52,6 +52,8 @@ public class RobotContainer {
     private final Drive drive;
     // private final Vision vision;
 
+    // CanLift and CanFold are methods in the Elevator subsystem that return BooleanSupplier objects
+
     private SwerveDriveSimulation driveSimulation = null;
     // TODO Set up arm and Elevator subsystems here
     ElevatorIO elevatorIO = Robot.isReal() ? new ElevatorIOReal() : new ElevatorIOSim();
@@ -67,7 +69,7 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // TODO for wrist
-        switch (Constants.currentMode) {
+        switch (Constants.CURRENT_MODE) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
                 drive = new Drive(
@@ -144,6 +146,7 @@ public class RobotContainer {
      * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
         // Default command, normal field-relative drive
         drive.setDefaultCommand(DriveCommands.joystickDrive(
                 drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> -controller.getRightX()));
@@ -170,7 +173,7 @@ public class RobotContainer {
         controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
         // Reset gyro / odometry
-        final Runnable resetGyro = Constants.currentMode == Constants.Mode.SIM
+        final Runnable resetGyro = Constants.CURRENT_MODE == Constants.Mode.SIM
                 ? () -> drive.resetOdometry(
                         driveSimulation.getSimulatedDriveTrainPose()) // reset odometry to actual robot pose during
                 // simulation
@@ -180,7 +183,7 @@ public class RobotContainer {
 
         // Example Coral Placement Code
         // TODO: delete these code for your own project
-        if (Constants.currentMode == Constants.Mode.SIM) {
+        if (Constants.CURRENT_MODE == Constants.Mode.SIM) {
             // L4 placement
             controller.y().onTrue(Commands.runOnce(() -> SimulatedArena.getInstance()
                     .addGamePieceProjectile(new ReefscapeCoralOnFly(
@@ -226,14 +229,14 @@ public class RobotContainer {
     }
 
     public void resetSimulationField() {
-        if (Constants.currentMode != Constants.Mode.SIM) return;
+        if (Constants.CURRENT_MODE != Constants.Mode.SIM) return;
 
         drive.resetOdometry(new Pose2d(3, 3, new Rotation2d()));
         SimulatedArena.getInstance().resetFieldForAuto();
     }
 
     public void updateSimulation() {
-        if (Constants.currentMode != Constants.Mode.SIM) return;
+        if (Constants.CURRENT_MODE != Constants.Mode.SIM) return;
 
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
