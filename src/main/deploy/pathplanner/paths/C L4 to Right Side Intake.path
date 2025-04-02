@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.629022606382979,
+        "y": 2.939793882978723
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2672872340425534,
+        "y": 2.426363031914893
+      },
+      "isLocked": false,
+      "linkedName": "Sitting at C L4"
+    },
+    {
+      "anchor": {
+        "x": 1.2952460106382977,
+        "y": 1.0027593085106377
+      },
+      "prevControl": {
+        "x": 2.123736702127659,
+        "y": 1.7612367021276594
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Sitting at Right Side Intake"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L1",
+      "waypointRelativePos": 0.1,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.46232220802563
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 58.29857033049423
+  },
+  "useDefaultConstraints": false
+}

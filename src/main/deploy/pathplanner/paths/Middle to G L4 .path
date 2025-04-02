@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.258045212765958,
+        "y": 3.838297872340425
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.418438808610539,
+        "y": 3.8511058016674533
+      },
+      "isLocked": false,
+      "linkedName": "L4 Checkpoint 1"
+    },
+    {
+      "anchor": {
+        "x": 5.8461103723404255,
+        "y": 3.838297872340425
+      },
+      "prevControl": {
+        "x": 6.9145031592001445,
+        "y": 3.8294862431406735
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Scored on G L4"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 0.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

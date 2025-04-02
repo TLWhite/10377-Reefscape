@@ -1,0 +1,93 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.8461103723404255,
+        "y": 3.838297872340425
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.802958776595744,
+        "y": 3.7682845744680846
+      },
+      "isLocked": false,
+      "linkedName": "Scored on G L4"
+    },
+    {
+      "anchor": {
+        "x": 7.118018617021277,
+        "y": 3.826628989361702
+      },
+      "prevControl": {
+        "x": 6.674601063829788,
+        "y": 3.8149601063829786
+      },
+      "nextControl": {
+        "x": 7.482626655670022,
+        "y": 3.836223937747195
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.1296875,
+        "y": 4.141688829787233
+      },
+      "prevControl": {
+        "x": 7.379429635052575,
+        "y": 4.130336914557571
+      },
+      "nextControl": {
+        "x": 6.872972074468086,
+        "y": 4.153357712765956
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.951130319148937,
+        "y": 4.0249999999999995
+      },
+      "prevControl": {
+        "x": 6.557912234042553,
+        "y": 4.048337765957446
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End of 12 Oclock Algea Pick"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "A1",
+      "waypointRelativePos": 0.2,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 0.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}
