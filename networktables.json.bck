@@ -22,5 +22,29 @@
     "properties": {
       "persistent": true
     }
+  },
+  {
+    "name": "/Preferences/Arm_kP",
+    "type": "double",
+    "value": 3.6,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Arm_kI",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/Arm_kD",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
   }
 ]
